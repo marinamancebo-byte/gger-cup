@@ -1,0 +1,1064 @@
+<!doctype html>
+<html>
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+  <style>
+    :root {
+      --bg: #EFF1F6;
+      --surface: #FFFFFF;
+      --ink: #151B2E;
+      --ink-soft: #5A6178;
+      --navy: #1C2B4A;
+      --navy-deep: #0F1728;
+      --gold: #B4811E;
+      --gold-ink: #7A5713;
+      --gold-soft: #F3E4BE;
+      --green: #2E8B57;
+      --green-soft: #DEF2E6;
+      --amber: #C4720F;
+      --amber-soft: #F8E5C8;
+      --red: #B23A31;
+      --red-soft: #F7DEDB;
+      --border: #DEE1EB;
+      --radius: 16px;
+      --shadow: 0 1px 2px rgba(21,27,46,.06), 0 10px 30px rgba(21,27,46,.07);
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'IBM Plex Sans', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    body { padding-bottom: 64px; }
+
+    h1, h2, h3, .display {
+      font-family: 'Fraunces', Georgia, serif;
+      text-wrap: balance;
+      margin: 0;
+    }
+
+    .num { font-variant-numeric: tabular-nums; }
+
+    a { color: inherit; }
+
+    /* ---------- topo ---------- */
+    .topo {
+      background: linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%);
+      color: #fff;
+      padding: 28px 20px 22px;
+    }
+    .topo-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .topo-titulo { display: flex; align-items: center; gap: 12px; }
+    .taca-logo { width: 34px; height: 34px; object-fit: contain; display: block; border-radius: 7px; }
+    .topo-titulo .taca-logo { background: #fff; padding: 4px; }
+    .topo-titulo h1 { font-size: 26px; font-weight: 700; color: #fff; }
+    .topo-sub { font-size: 13px; color: #B9C2D9; margin-top: 4px; }
+    .topo-conta {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: #DDE3F0;
+    }
+    .botao-sair {
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.2);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .botao-sair:hover { background: rgba(255,255,255,.18); }
+
+    .faixa-periodo {
+      max-width: 760px;
+      margin: 16px auto 0;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 12px;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 13px;
+      color: #E3E8F2;
+    }
+    .faixa-periodo strong { color: #fff; }
+
+    /* ---------- navegação ---------- */
+    nav.abas {
+      max-width: 760px;
+      margin: -14px auto 0;
+      padding: 0 20px;
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+    }
+    nav.abas button {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 16px;
+      border-radius: 12px 12px 0 0;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      background: var(--surface);
+      color: var(--ink-soft);
+      cursor: pointer;
+      white-space: nowrap;
+      box-shadow: var(--shadow);
+    }
+    nav.abas button.ativa { color: var(--navy); background: var(--surface); }
+    nav.abas button:not(.ativa) { opacity: .68; box-shadow: none; background: transparent; border-color: transparent; }
+
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .cartao {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+    .cartao + .cartao { margin-top: 16px; }
+
+    section[hidden] { display: none !important; }
+
+    /* ---------- login ---------- */
+    .tela-login {
+      min-height: calc(100vh - 40px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .login-caixa { width: 100%; max-width: 380px; }
+    .login-cabecalho { text-align: center; margin-bottom: 22px; }
+    .login-cabecalho .taca-logo { width: 56px; height: 56px; margin: 0 auto; border-radius: 12px; }
+    .login-cabecalho h1 { font-size: 24px; margin-top: 6px; }
+    .login-cabecalho p { color: var(--ink-soft); font-size: 13px; margin-top: 6px; }
+
+    .campo { margin-bottom: 14px; }
+    .campo label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .campo input, .campo select {
+      width: 100%;
+      font-family: inherit;
+      font-size: 15px;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #FBFBFD;
+      color: var(--ink);
+    }
+    .campo input:focus, .campo select:focus {
+      outline: 2px solid var(--gold);
+      outline-offset: 1px;
+      border-color: var(--gold);
+    }
+    .campo small { display: block; margin-top: 5px; color: var(--ink-soft); font-size: 11.5px; }
+
+    .botao {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      font-family: inherit;
+      font-size: 14.5px;
+      font-weight: 700;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      background: var(--navy);
+      color: #fff;
+    }
+    .botao:hover { background: var(--navy-deep); }
+    .botao:disabled { opacity: .55; cursor: default; }
+    .botao.ouro { background: var(--gold); color: #241902; }
+    .botao.ouro:hover { background: #A5751B; }
+    .botao.linha {
+      background: transparent;
+      color: var(--ink-soft);
+      border: 1px solid var(--border);
+    }
+    .botao.pequeno { width: auto; padding: 8px 14px; font-size: 13px; }
+    .botao.verde { background: var(--green); }
+    .botao.vermelho { background: var(--red); }
+
+    .alterna-login {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--ink-soft);
+    }
+    .alterna-login button {
+      background: none; border: none; color: var(--navy);
+      font-weight: 700; cursor: pointer; font-family: inherit; font-size: 13px;
+      text-decoration: underline;
+    }
+
+    .aviso {
+      font-size: 13px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 14px;
+      display: none;
+    }
+    .aviso.erro { display: block; background: var(--red-soft); color: var(--red); }
+    .aviso.sucesso { display: block; background: var(--green-soft); color: var(--green); }
+
+    /* ---------- placar ---------- */
+    .titulo-secao {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 14px; gap: 10px; flex-wrap: wrap;
+    }
+    .titulo-secao h2 { font-size: 19px; }
+    .titulo-secao .legenda { font-size: 12.5px; color: var(--ink-soft); }
+
+    table.ranking { width: 100%; border-collapse: collapse; }
+    table.ranking th {
+      text-align: left;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--ink-soft);
+      padding: 0 8px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    table.ranking td {
+      padding: 11px 8px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+      vertical-align: middle;
+    }
+    table.ranking tr:last-child td { border-bottom: none; }
+    table.ranking th.num, table.ranking td.num { text-align: right; }
+    .pos {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 24px; height: 24px; border-radius: 50%;
+      font-size: 12px; font-weight: 700; color: var(--ink-soft);
+    }
+    .pos.ouro { background: var(--gold-soft); color: var(--gold-ink); }
+    .pos.prata { background: #E7E9EF; color: #565D72; }
+    .pos.bronze { background: #F3E1D2; color: #8A5327; }
+    .pontos-total { font-family: 'Fraunces', serif; font-weight: 700; font-size: 17px; color: var(--navy); }
+    .nome-linha { font-weight: 600; }
+    .mini-stats { font-size: 11.5px; color: var(--ink-soft); margin-top: 2px; }
+
+    .vazio { text-align: center; padding: 30px 10px; color: var(--ink-soft); font-size: 13.5px; }
+
+    /* ---------- pódio ---------- */
+    .podio-wrap {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 10px;
+      padding: 4px 4px 0;
+    }
+    .podio-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1 1 0;
+      max-width: 160px;
+      min-width: 0;
+    }
+    .podio-col.p1 { order: 2; }
+    .podio-col.p2 { order: 1; }
+    .podio-col.p3 { order: 3; }
+    .podio-avatar {
+      width: 50px; height: 50px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+    .podio-col.p1 .podio-avatar {
+      width: 64px; height: 64px; font-size: 23px;
+      background: linear-gradient(160deg, #D9AE3E, var(--gold));
+    }
+    .podio-col.p2 .podio-avatar { background: linear-gradient(160deg, #B7BDCC, #8890A3); }
+    .podio-col.p3 .podio-avatar { background: linear-gradient(160deg, #D19A6B, #A5643A); }
+    .podio-nome {
+      margin-top: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .podio-pontos {
+      font-family: 'Fraunces', serif;
+      font-weight: 800;
+      color: var(--navy);
+      font-size: 15px;
+      margin-top: 1px;
+    }
+    .podio-col.p1 .podio-pontos { font-size: 19px; }
+    .podio-bloco {
+      width: 100%;
+      margin-top: 10px;
+      border-radius: 10px 10px 0 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding-top: 6px;
+      font-family: 'Fraunces', serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: #fff;
+    }
+    .podio-col.p1 .podio-bloco { height: 70px; background: linear-gradient(180deg, var(--gold), #8f6516); }
+    .podio-col.p2 .podio-bloco { height: 48px; background: linear-gradient(180deg, #9aa3b8, #6b7284); }
+    .podio-col.p3 .podio-bloco { height: 34px; background: linear-gradient(180deg, #c98a55, #8A5327); }
+
+    /* ---------- feed ---------- */
+    .feed-item {
+      display: flex; justify-content: space-between; gap: 12px;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+      font-size: 13.5px;
+    }
+    .feed-item:last-child { border-bottom: none; }
+    .feed-esq { min-width: 0; }
+    .feed-tipo {
+      display: inline-block; font-size: 10.5px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .03em;
+      padding: 2px 7px; border-radius: 999px; margin-bottom: 4px;
+    }
+    .feed-tipo.neg { background: #E6E9F2; color: var(--ink-soft); }
+    .feed-tipo.proposta { background: var(--amber-soft); color: var(--amber); }
+    .feed-tipo.fechamento { background: var(--green-soft); color: var(--green); }
+    .feed-lead { font-weight: 600; }
+    .feed-meta { color: var(--ink-soft); font-size: 12px; margin-top: 2px; }
+    .feed-dir { text-align: right; white-space: nowrap; }
+    .feed-pontos { font-family: 'Fraunces', serif; font-weight: 700; color: var(--navy); }
+
+    /* ---------- registrar ---------- */
+    .tipos-grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 18px; }
+    .tipo-opcao {
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 8px;
+      text-align: center;
+      cursor: pointer;
+      background: #FBFBFD;
+    }
+    .tipo-opcao .emoji { font-size: 20px; display: block; margin-bottom: 4px; }
+    .tipo-opcao .rotulo { font-size: 12.5px; font-weight: 700; }
+    .tipo-opcao .pts { font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
+    .tipo-opcao.selecionada { border-color: var(--gold); background: var(--gold-soft); }
+    .tipo-opcao.selecionada .rotulo { color: var(--gold-ink); }
+
+    .prevista {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #FBFBFD; border: 1px dashed var(--border);
+      border-radius: 10px; padding: 11px 14px; margin-bottom: 16px;
+      font-size: 13px; color: var(--ink-soft);
+    }
+    .prevista strong { font-family: 'Fraunces', serif; font-size: 18px; color: var(--navy); }
+
+    /* ---------- badges de status ---------- */
+    .selo {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .03em; padding: 3px 9px; border-radius: 999px;
+    }
+    .selo.pendente { background: var(--amber-soft); color: var(--amber); }
+    .selo.aprovado { background: var(--green-soft); color: var(--green); }
+    .selo.rejeitado { background: var(--red-soft); color: var(--red); }
+
+    .registro-item {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+    .registro-topo { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 6px; }
+    .registro-lead { font-weight: 700; font-size: 14.5px; }
+    .registro-meta { font-size: 12.5px; color: var(--ink-soft); }
+    .registro-motivo { font-size: 12.5px; color: var(--red); margin-top: 6px; }
+    .registro-acoes { display: flex; gap: 8px; margin-top: 10px; }
+
+    /* ---------- admin ---------- */
+    .lista-admins { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .chip-admin {
+      font-size: 12px; background: #EEF0F6; color: var(--ink-soft);
+      padding: 4px 10px; border-radius: 999px;
+    }
+
+    .carregando { text-align: center; padding: 24px; color: var(--ink-soft); font-size: 13px; }
+
+    .toast {
+      position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%);
+      background: var(--navy-deep); color: #fff; font-size: 13px;
+      padding: 11px 18px; border-radius: 999px; box-shadow: var(--shadow);
+      opacity: 0; pointer-events: none; transition: opacity .2s ease;
+      z-index: 50; max-width: 90vw; text-align: center;
+    }
+    .toast.mostrar { opacity: 1; }
+    .toast.erro { background: var(--red); }
+
+    @media (max-width: 480px) {
+      .topo-titulo h1 { font-size: 21px; }
+      .taca-logo { width: 26px; height: 26px; }
+      table.ranking th:nth-child(3), table.ranking td:nth-child(3),
+      table.ranking th:nth-child(4), table.ranking td:nth-child(4) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================== TELA DE LOGIN ===================== -->
+  <section id="tela-login" class="tela-login">
+    <div class="login-caixa cartao">
+      <div class="login-cabecalho">
+        <img class="taca-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTcgNGgxMHYzYTUgNSAwIDAgMS01IDUgNSA1IDAgMCAxLTUtNVY0eiIgZmlsbD0iI0I0ODExRSIvPjxwYXRoIGQ9Ik03IDVINGExIDEgMCAwIDAtMSAxdjFhNCA0IDAgMCAxITQgNCIgc3Ryb2tlPSIjQjQ4MTFFIiBzdHJva2Utd2lkdGg9IjEuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTE3IDVoM2ExIDEgMCAwIDEgMSAxdjFhNCA0IDAgMCAxLTQgNCIgc3Ryb2tlPSIjQjQ4MTFFIiBzdHJva2Utd2lkdGg9IjEuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHJlY3QgeD0iMTAuNSIgeT0iMTIiIHdpZHRoPSIzIiBoZWlnaHQ9IjQiIGZpbGw9IiNCNDgxMUUiLz48cmVjdCB4PSI3IiB5PSIxOCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjIiIHJ4PSIxIiBmaWxsPSIjQjQ4MTFFIi8+PHJlY3QgeD0iOSIgeT0iMTYiIHdpZHRoPSI2IiBoZWlnaHQ9IjIiIGZpbGw9IiNCNDgxMUUiLz48L3N2Zz4=" alt="Logo Grupo Gestão">
+        <h1>Aniversário GGER Cup</h1>
+        <p>Registre suas negs, propostas e fechamentos<br>e acompanhe o placar da competição.</p>
+      </div>
+
+      <div id="login-aviso" class="aviso erro"></div>
+
+      <form id="form-login">
+        <div class="campo">
+          <label for="campo-nome">Nome completo</label>
+          <input id="campo-nome" type="text" autocomplete="name" placeholder="Ex.: Marina Mancebo" required>
+        </div>
+        <div class="campo">
+          <label for="campo-senha">Senha</label>
+          <input id="campo-senha" type="password" autocomplete="current-password" placeholder="Mínimo 4 caracteres" required>
+          <small id="ajuda-senha">Primeira vez aqui? Essa senha cria sua conta.</small>
+        </div>
+        <div class="campo" id="campo-codigo-wrap" hidden>
+          <label for="campo-codigo">Código de organizador <span style="text-transform:none;font-weight:400;">(opcional)</span></label>
+          <input id="campo-codigo" type="text" placeholder="Só preencha se você for organizador(a)">
+        </div>
+        <button type="submit" class="botao ouro" id="botao-entrar">Entrar / Cadastrar</button>
+      </form>
+
+      <div class="alterna-login">
+        <span id="texto-alterna">Ainda não tem conta?</span>
+        <button type="button" id="botao-alterna">Sou organizador(a)</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== APP (LOGADO) ===================== -->
+  <div id="app" hidden>
+    <header class="topo">
+      <div class="topo-inner">
+        <div class="topo-titulo">
+          <img class="taca-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZD0iTTcgNGgxMHYzYTUgNSAwIDAgMS01IDUgNSA1IDAgMCAxLTUtNVY0eiIgZmlsbD0iI0I0ODExRSIvPjxwYXRoIGQ9Ik03IDVINGExIDEgMCAwIDAtMSAxdjFhNCA0IDAgMCAwIDQgNCIgc3Ryb2tlPSIjQjQ4MTFFIiBzdHJva2Utd2lkdGg9IjEuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTE3IDVoM2ExIDEgMCAwIDEgMSAxdjFhNCA0IDAgMCAxLTQgNCIgc3Ryb2tlPSIjQjQ4MTFFIiBzdHJva2Utd2lkdGg9IjEuNSIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHJlY3QgeD0iMTAuNSIgeT0iMTIiIHdpZHRoPSIzIiBoZWlnaHQ9IjQiIGZpbGw9IiNCNDgxMUUiLz48cmVjdCB4PSI3IiB5PSIxOCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjIiIHJ4PSIxIiBmaWxsPSIjQjQ4MTFFIi8+PHJlY3QgeD0iOSIgeT0iMTYiIHdpZHRoPSI2IiBoZWlnaHQ9IjIiIGZpbGw9IiNCNDgxMUUiLz48L3N2Zz4=" alt="Logo Grupo Gestão">
+          <div>
+            <h1>Aniversário GGER Cup</h1>
+            <div class="topo-sub">Competição comercial · Grupo Gestão</div>
+          </div>
+        </div>
+        <div class="topo-conta">
+          <span id="saudacao"></span>
+          <button class="botao-sair" id="botao-sair">Sair</button>
+        </div>
+      </div>
+      <div class="faixa-periodo">
+        <span>Período: <strong id="periodo-texto">—</strong></span>
+        <span id="contagem-texto"><strong>—</strong></span>
+      </div>
+    </header>
+
+    <nav class="abas">
+      <button data-aba="placar" class="ativa">Placar</button>
+      <button data-aba="registrar">Registrar</button>
+      <button data-aba="meus">Meus registros</button>
+      <button data-aba="admin" id="aba-admin-botao" hidden>Aprovações</button>
+    </nav>
+
+    <main>
+      <!-- PLACAR -->
+      <section id="secao-placar">
+        <div class="cartao" id="podio-cartao" hidden>
+          <div class="titulo-secao">
+            <h2>Top 3</h2>
+          </div>
+          <div id="podio-conteudo"></div>
+        </div>
+
+        <div class="cartao">
+          <div class="titulo-secao">
+            <h2>Ranking geral</h2>
+            <span class="legenda">só registros aprovados contam ponto</span>
+          </div>
+          <div id="ranking-conteudo" class="carregando">Carregando placar…</div>
+        </div>
+
+        <div class="cartao">
+          <div class="titulo-secao">
+            <h2>Últimos aprovados</h2>
+          </div>
+          <div id="feed-conteudo" class="carregando">Carregando…</div>
+        </div>
+      </section>
+
+      <!-- REGISTRAR -->
+      <section id="secao-registrar" hidden>
+        <div class="cartao">
+          <div class="titulo-secao"><h2>Novo registro</h2></div>
+          <div id="registrar-aviso" class="aviso erro"></div>
+
+          <div class="tipos-grade">
+            <div class="tipo-opcao selecionada" data-tipo="neg">
+              <span class="emoji">📇</span>
+              <div class="rotulo">Neg</div>
+              <div class="pts">1 ponto</div>
+            </div>
+            <div class="tipo-opcao" data-tipo="proposta">
+              <span class="emoji">📄</span>
+              <div class="rotulo">Proposta</div>
+              <div class="pts">2 pontos</div>
+            </div>
+            <div class="tipo-opcao" data-tipo="fechamento">
+              <span class="emoji">✅</span>
+              <div class="rotulo">Fechamento</div>
+              <div class="pts">10+ pontos</div>
+            </div>
+          </div>
+
+          <form id="form-registro">
+            <div class="campo">
+              <label for="reg-lead">Nome do lead / cliente</label>
+              <input id="reg-lead" type="text" placeholder="Ex.: Padaria Boulangerie" required>
+            </div>
+            <div class="campo">
+              <label for="reg-data">Data</label>
+              <input id="reg-data" type="date" required>
+            </div>
+            <div class="campo" id="reg-valor-wrap" hidden>
+              <label for="reg-valor">Valor do contrato (R$)</label>
+              <input id="reg-valor" type="number" min="0" step="0.01" placeholder="Ex.: 15000">
+            </div>
+
+            <div class="prevista">
+              <span>Esse registro vale</span>
+              <strong id="prevista-pontos">1 ponto</strong>
+            </div>
+
+            <button type="submit" class="botao ouro" id="botao-registrar">Enviar para aprovação</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- MEUS REGISTROS -->
+      <section id="secao-meus" hidden>
+        <div class="cartao">
+          <div class="titulo-secao"><h2>Meus registros</h2></div>
+          <div id="meus-conteudo" class="carregando">Carregando…</div>
+        </div>
+      </section>
+
+      <!-- ADMIN -->
+      <section id="secao-admin" hidden>
+        <div class="cartao">
+          <div class="titulo-secao">
+            <h2>Aguardando aprovação</h2>
+            <span class="legenda">visível só para organizadores</span>
+          </div>
+          <div id="pendentes-conteudo" class="carregando">Carregando…</div>
+        </div>
+        <div class="cartao">
+          <div class="titulo-secao"><h2>Organizadores</h2></div>
+          <div id="admins-conteudo" class="carregando">Carregando…</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ---------------------------------------------------------------
+    // Conexão com o Supabase — preencha com os dados do SEU projeto
+    // (no painel do Supabase: Project Settings → API)
+    // ---------------------------------------------------------------
+    var SUPABASE_URL = 'https://ikpzplnzayibwaeqiavg.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlrcHpwbG56YXlpYndhZXFpYXZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkzOTczOTAsImV4cCI6MjEwNDk3MzM5MH0.T88Obb5gTtrz4uvlmwCtHhRKbuiYgmCR9gdH-c8tuEM';
+    var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function chamarRpc(nomeFuncao, params) {
+      var resp = await supabaseClient.rpc(nomeFuncao, params || {});
+      if (resp.error) throw resp.error;
+      return resp.data;
+    }
+
+    // ---------------------------------------------------------------
+    // Estado local
+    // ---------------------------------------------------------------
+    var sessao = null; // { token, nome, isAdmin }
+    var tipoSelecionado = 'neg';
+    var PONTOS_FIXOS = { neg: 1, proposta: 2 };
+
+    function carregarSessaoSalva() {
+      try {
+        var bruto = localStorage.getItem('ggerCupSessao');
+        return bruto ? JSON.parse(bruto) : null;
+      } catch (e) { return null; }
+    }
+    function salvarSessao(s) {
+      try { localStorage.setItem('ggerCupSessao', JSON.stringify(s)); } catch (e) {}
+    }
+    function limparSessao() {
+      try { localStorage.removeItem('ggerCupSessao'); } catch (e) {}
+    }
+
+    function mostrarToast(msg, ehErro) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast mostrar' + (ehErro ? ' erro' : '');
+      clearTimeout(t._timer);
+      t._timer = setTimeout(function () { t.className = 'toast'; }, 3200);
+    }
+
+    // ---------------------------------------------------------------
+    // Login / cadastro
+    // ---------------------------------------------------------------
+    var modoOrganizador = false;
+
+    document.getElementById('botao-alterna').addEventListener('click', function () {
+      modoOrganizador = !modoOrganizador;
+      document.getElementById('campo-codigo-wrap').hidden = !modoOrganizador;
+      document.getElementById('texto-alterna').textContent = modoOrganizador
+        ? 'Preencha o código combinado com a organização.'
+        : 'Ainda não tem conta?';
+      this.textContent = modoOrganizador ? 'Voltar' : 'Sou organizador(a)';
+    });
+
+    document.getElementById('form-login').addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var nome = document.getElementById('campo-nome').value;
+      var senha = document.getElementById('campo-senha').value;
+      var codigo = document.getElementById('campo-codigo').value;
+      var botao = document.getElementById('botao-entrar');
+      var aviso = document.getElementById('login-aviso');
+      aviso.style.display = 'none';
+      botao.disabled = true;
+      botao.textContent = 'Entrando…';
+
+      chamarRpc('cadastrar_ou_logar', { p_nome: nome, p_senha: senha, p_codigo_admin: codigo })
+        .then(function (resp) {
+          botao.disabled = false;
+          botao.textContent = 'Entrar / Cadastrar';
+          if (!resp.ok) {
+            aviso.textContent = resp.erro;
+            aviso.style.display = 'block';
+            return;
+          }
+          sessao = resp;
+          salvarSessao(sessao);
+          entrarNoApp();
+        })
+        .catch(function (erro) {
+          botao.disabled = false;
+          botao.textContent = 'Entrar / Cadastrar';
+          aviso.textContent = 'Não consegui falar com o servidor. Tente de novo em instantes.';
+          aviso.style.display = 'block';
+        });
+    });
+
+    document.getElementById('botao-sair').addEventListener('click', function () {
+      sessao = null;
+      limparSessao();
+      document.getElementById('app').hidden = true;
+      document.getElementById('tela-login').hidden = false;
+    });
+
+    function entrarNoApp() {
+      document.getElementById('tela-login').hidden = true;
+      document.getElementById('app').hidden = false;
+      document.getElementById('saudacao').textContent = 'Olá, ' + sessao.nome.split(' ')[0];
+      document.getElementById('aba-admin-botao').hidden = !sessao.isAdmin;
+      document.getElementById('reg-data').value = new Date().toISOString().slice(0, 10);
+      irParaAba('placar');
+      carregarPlacar();
+    }
+
+    // ---------------------------------------------------------------
+    // Navegação por abas
+    // ---------------------------------------------------------------
+    document.querySelectorAll('nav.abas button').forEach(function (btn) {
+      btn.addEventListener('click', function () { irParaAba(btn.getAttribute('data-aba')); });
+    });
+
+    function irParaAba(aba) {
+      document.querySelectorAll('nav.abas button').forEach(function (b) {
+        b.classList.toggle('ativa', b.getAttribute('data-aba') === aba);
+      });
+      ['placar', 'registrar', 'meus', 'admin'].forEach(function (nome) {
+        document.getElementById('secao-' + nome).hidden = nome !== aba;
+      });
+      if (aba === 'placar') carregarPlacar();
+      if (aba === 'meus') carregarMeusRegistros();
+      if (aba === 'admin' && sessao.isAdmin) { carregarPendentes(); carregarAdmins(); }
+    }
+
+    // ---------------------------------------------------------------
+    // Placar
+    // ---------------------------------------------------------------
+    function formatarBRL(v) {
+      return Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
+    }
+    function formatarDataCurta(iso) {
+      if (!iso) return '';
+      var d = new Date(iso);
+      if (isNaN(d)) d = new Date(iso + 'T00:00:00');
+      return d.toLocaleDateString('pt-BR');
+    }
+    var ROTULO_TIPO = { neg: 'Neg', proposta: 'Proposta', fechamento: 'Fechamento' };
+
+    function carregarPlacar() {
+      chamarRpc('get_placar')
+        .then(function (resp) {
+          if (!resp.ok) return;
+          renderizarPeriodo(resp.competicao);
+          renderizarPodio(resp.ranking);
+          renderizarRanking(resp.ranking);
+          renderizarFeed(resp.feed);
+        })
+        .catch(function () { mostrarToast('Não consegui carregar o placar agora.', true); });
+    }
+
+    function iniciaisNome(nome) {
+      var partes = (nome || '').trim().split(/\s+/);
+      if (!partes.length || !partes[0]) return '?';
+      if (partes.length === 1) return partes[0].slice(0, 2).toUpperCase();
+      return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
+    }
+
+    function renderizarPodio(ranking) {
+      var cartao = document.getElementById('podio-cartao');
+      var alvo = document.getElementById('podio-conteudo');
+      var top = ranking.slice(0, 3);
+      if (!top.length) { cartao.hidden = true; return; }
+      cartao.hidden = false;
+      var classes = ['p1', 'p2', 'p3'];
+      var blocoRotulo = ['1', '2', '3'];
+      alvo.innerHTML = '<div class="podio-wrap">' + top.map(function (r, i) {
+        return '' +
+          '<div class="podio-col ' + classes[i] + '">' +
+            '<div class="podio-avatar">' + escapeHtml(iniciaisNome(r.nome)) + '</div>' +
+            '<div class="podio-nome" title="' + escapeHtml(r.nome) + '">' + escapeHtml(r.nome.split(' ')[0]) + '</div>' +
+            '<div class="podio-pontos">' + r.pontos + (r.pontos === 1 ? ' pt' : ' pts') + '</div>' +
+            '<div class="podio-bloco">' + blocoRotulo[i] + '</div>' +
+          '</div>';
+      }).join('') + '</div>';
+    }
+
+    function renderizarPeriodo(c) {
+      var ini = formatarDataCurta(c.inicio);
+      var fim = formatarDataCurta(c.fim);
+      document.getElementById('periodo-texto').textContent = ini + ' a ' + fim;
+
+      var hoje = new Date(); hoje.setHours(0,0,0,0);
+      var dIni = new Date(c.inicio + 'T00:00:00');
+      var dFim = new Date(c.fim + 'T00:00:00');
+      var texto;
+      if (hoje < dIni) {
+        var faltamComecar = Math.ceil((dIni - hoje) / 86400000);
+        texto = 'começa em ' + faltamComecar + ' dia' + (faltamComecar === 1 ? '' : 's');
+      } else if (hoje > dFim) {
+        texto = 'competição encerrada';
+      } else {
+        var faltam = Math.ceil((dFim - hoje) / 86400000);
+        texto = faltam <= 0 ? 'último dia!' : ('faltam ' + faltam + ' dia' + (faltam === 1 ? '' : 's'));
+      }
+      document.getElementById('contagem-texto').innerHTML = '<strong>' + texto + '</strong>';
+    }
+
+    function renderizarRanking(ranking) {
+      var alvo = document.getElementById('ranking-conteudo');
+      if (!ranking.length) {
+        alvo.innerHTML = '<div class="vazio">Ainda não há registros aprovados. Que comece o jogo! 🏁</div>';
+        return;
+      }
+      var medalha = ['ouro', 'prata', 'bronze'];
+      var linhas = ranking.map(function (r, i) {
+        var classePos = medalha[i] || '';
+        return '' +
+          '<tr>' +
+            '<td><span class="pos ' + classePos + '">' + (i + 1) + '</span></td>' +
+            '<td><div class="nome-linha">' + escapeHtml(r.nome) + '</div>' +
+              '<div class="mini-stats">' + r.negs + ' neg · ' + r.propostas + ' proposta(s) · ' + r.fechamentos + ' fechamento(s)</div></td>' +
+            '<td class="num">' + r.negs + '</td>' +
+            '<td class="num">' + r.propostas + '</td>' +
+            '<td class="num"><span class="pontos-total">' + r.pontos + '</span></td>' +
+          '</tr>';
+      }).join('');
+      alvo.innerHTML = '' +
+        '<table class="ranking"><thead><tr>' +
+          '<th></th><th>Nome</th><th class="num">Negs</th><th class="num">Propostas</th><th class="num">Pontos</th>' +
+        '</tr></thead><tbody>' + linhas + '</tbody></table>';
+    }
+
+    function renderizarFeed(feed) {
+      var alvo = document.getElementById('feed-conteudo');
+      if (!feed.length) {
+        alvo.innerHTML = '<div class="vazio">Nenhum registro aprovado ainda.</div>';
+        return;
+      }
+      alvo.innerHTML = feed.map(function (r) {
+        var valorTxt = r.tipo === 'fechamento' ? formatarBRL(r.valor) : '';
+        return '' +
+          '<div class="feed-item">' +
+            '<div class="feed-esq">' +
+              '<span class="feed-tipo ' + r.tipo + '">' + ROTULO_TIPO[r.tipo] + '</span>' +
+              '<div class="feed-lead">' + escapeHtml(r.lead) + '</div>' +
+              '<div class="feed-meta">' + escapeHtml(r.autor) + ' · ' + formatarDataCurta(r.data) + (valorTxt ? ' · ' + valorTxt : '') + '</div>' +
+            '</div>' +
+            '<div class="feed-dir"><span class="feed-pontos">+' + r.pontos + '</span></div>' +
+          '</div>';
+      }).join('');
+    }
+
+    // ---------------------------------------------------------------
+    // Registrar
+    // ---------------------------------------------------------------
+    document.querySelectorAll('.tipo-opcao').forEach(function (el) {
+      el.addEventListener('click', function () {
+        tipoSelecionado = el.getAttribute('data-tipo');
+        document.querySelectorAll('.tipo-opcao').forEach(function (o) { o.classList.remove('selecionada'); });
+        el.classList.add('selecionada');
+        document.getElementById('reg-valor-wrap').hidden = tipoSelecionado !== 'fechamento';
+        atualizarPrevisao();
+      });
+    });
+
+    document.getElementById('reg-valor').addEventListener('input', atualizarPrevisao);
+
+    function calcularPontosCliente(tipo, valor) {
+      if (tipo === 'neg') return 1;
+      if (tipo === 'proposta') return 2;
+      if (tipo === 'fechamento') {
+        var v = Number(valor) || 0;
+        if (v <= 0) return 0;
+        return 10 * Math.ceil(v / 10000);
+      }
+      return 0;
+    }
+
+    function atualizarPrevisao() {
+      var valor = document.getElementById('reg-valor').value;
+      var pts = calcularPontosCliente(tipoSelecionado, valor);
+      document.getElementById('prevista-pontos').textContent = pts + (pts === 1 ? ' ponto' : ' pontos');
+    }
+
+    document.getElementById('form-registro').addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var lead = document.getElementById('reg-lead').value;
+      var data = document.getElementById('reg-data').value;
+      var valor = document.getElementById('reg-valor').value;
+      var aviso = document.getElementById('registrar-aviso');
+      var botao = document.getElementById('botao-registrar');
+      aviso.style.display = 'none';
+
+      if (tipoSelecionado === 'fechamento' && (!valor || Number(valor) <= 0)) {
+        aviso.textContent = 'Informe o valor do contrato fechado.';
+        aviso.style.display = 'block';
+        return;
+      }
+
+      botao.disabled = true;
+      botao.textContent = 'Enviando…';
+
+      chamarRpc('criar_registro', {
+        p_token: sessao.token,
+        p_tipo: tipoSelecionado,
+        p_lead: lead,
+        p_data: data,
+        p_valor: valor === '' ? null : Number(valor)
+      })
+        .then(function (resp) {
+          botao.disabled = false;
+          botao.textContent = 'Enviar para aprovação';
+          if (!resp.ok) {
+            aviso.textContent = resp.erro;
+            aviso.style.display = 'block';
+            return;
+          }
+          document.getElementById('form-registro').reset();
+          document.getElementById('reg-data').value = new Date().toISOString().slice(0, 10);
+          document.getElementById('reg-valor-wrap').hidden = true;
+          document.querySelectorAll('.tipo-opcao').forEach(function (o) { o.classList.remove('selecionada'); });
+          document.querySelector('.tipo-opcao[data-tipo="neg"]').classList.add('selecionada');
+          tipoSelecionado = 'neg';
+          atualizarPrevisao();
+          mostrarToast('Registrado! Vale ' + resp.pontos + ' ponto(s) assim que for aprovado.');
+        })
+        .catch(function () {
+          botao.disabled = false;
+          botao.textContent = 'Enviar para aprovação';
+          aviso.textContent = 'Não consegui enviar agora. Tente de novo.';
+          aviso.style.display = 'block';
+        });
+    });
+
+    // ---------------------------------------------------------------
+    // Meus registros
+    // ---------------------------------------------------------------
+    function carregarMeusRegistros() {
+      var alvo = document.getElementById('meus-conteudo');
+      alvo.innerHTML = '<div class="carregando">Carregando…</div>';
+      chamarRpc('get_meus_registros', { p_token: sessao.token })
+        .then(function (resp) {
+          if (!resp.ok) { alvo.innerHTML = '<div class="vazio">' + resp.erro + '</div>'; return; }
+          if (!resp.registros.length) {
+            alvo.innerHTML = '<div class="vazio">Você ainda não registrou nada. Vá em "Registrar" e comece a marcar pontos!</div>';
+            return;
+          }
+          alvo.innerHTML = resp.registros.map(function (r) {
+            var valorTxt = r.tipo === 'fechamento' ? (' · ' + formatarBRL(r.valor)) : '';
+            var motivo = (r.status === 'rejeitado' && r.motivoRejeicao) ? '<div class="registro-motivo">Motivo: ' + escapeHtml(r.motivoRejeicao) + '</div>' : '';
+            return '' +
+              '<div class="registro-item">' +
+                '<div class="registro-topo">' +
+                  '<div>' +
+                    '<span class="feed-tipo ' + r.tipo + '">' + ROTULO_TIPO[r.tipo] + '</span>' +
+                    '<div class="registro-lead">' + escapeHtml(r.lead) + '</div>' +
+                  '</div>' +
+                  '<span class="selo ' + r.status + '">' + r.status + '</span>' +
+                '</div>' +
+                '<div class="registro-meta">' + formatarDataCurta(r.data) + valorTxt + ' · vale ' + r.pontos + ' pt(s)</div>' +
+                motivo +
+              '</div>';
+          }).join('');
+        })
+        .catch(function () { alvo.innerHTML = '<div class="vazio">Não consegui carregar agora.</div>'; });
+    }
+
+    // ---------------------------------------------------------------
+    // Admin
+    // ---------------------------------------------------------------
+    function carregarPendentes() {
+      var alvo = document.getElementById('pendentes-conteudo');
+      alvo.innerHTML = '<div class="carregando">Carregando…</div>';
+      chamarRpc('get_pendentes', { p_token: sessao.token })
+        .then(function (resp) {
+          if (!resp.ok) { alvo.innerHTML = '<div class="vazio">' + resp.erro + '</div>'; return; }
+          if (!resp.pendentes.length) {
+            alvo.innerHTML = '<div class="vazio">Nenhum registro pendente. Tudo em dia! ✨</div>';
+            return;
+          }
+          alvo.innerHTML = resp.pendentes.map(function (r) {
+            var valorTxt = r.tipo === 'fechamento' ? (' · ' + formatarBRL(r.valor)) : '';
+            return '' +
+              '<div class="registro-item" data-id="' + r.id + '">' +
+                '<div class="registro-topo">' +
+                  '<div>' +
+                    '<span class="feed-tipo ' + r.tipo + '">' + ROTULO_TIPO[r.tipo] + '</span>' +
+                    '<div class="registro-lead">' + escapeHtml(r.lead) + '</div>' +
+                  '</div>' +
+                  '<span class="selo pendente">' + r.pontos + ' pt(s)</span>' +
+                '</div>' +
+                '<div class="registro-meta">' + escapeHtml(r.autor) + ' · ' + formatarDataCurta(r.data) + valorTxt + '</div>' +
+                '<div class="registro-acoes">' +
+                  '<button class="botao verde pequeno" data-acao="aprovado">Aprovar</button>' +
+                  '<button class="botao vermelho pequeno" data-acao="rejeitado">Rejeitar</button>' +
+                '</div>' +
+              '</div>';
+          }).join('');
+
+          alvo.querySelectorAll('button[data-acao]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              var item = btn.closest('.registro-item');
+              var id = item.getAttribute('data-id');
+              var decisao = btn.getAttribute('data-acao');
+              var motivo = '';
+              if (decisao === 'rejeitado') {
+                motivo = window.prompt('Motivo da rejeição (opcional):') || '';
+              }
+              item.style.opacity = '.5';
+              chamarRpc('moderar_registro', { p_token: sessao.token, p_id: id, p_decisao: decisao, p_motivo: motivo })
+                .then(function (r2) {
+                  if (!r2.ok) { mostrarToast(r2.erro, true); item.style.opacity = '1'; return; }
+                  mostrarToast(decisao === 'aprovado' ? 'Registro aprovado.' : 'Registro rejeitado.');
+                  carregarPendentes();
+                })
+                .catch(function () { mostrarToast('Não consegui salvar agora.', true); item.style.opacity = '1'; });
+            });
+          });
+        })
+        .catch(function () { alvo.innerHTML = '<div class="vazio">Não consegui carregar agora.</div>'; });
+    }
+
+    function carregarAdmins() {
+      var alvo = document.getElementById('admins-conteudo');
+      chamarRpc('get_admins', { p_token: sessao.token })
+        .then(function (resp) {
+          if (!resp.ok) { alvo.innerHTML = ''; return; }
+          alvo.innerHTML = '<div class="lista-admins">' + resp.admins.map(function (n) {
+            return '<span class="chip-admin">' + escapeHtml(n) + '</span>';
+          }).join('') + '</div>';
+        })
+        .catch(function () { alvo.innerHTML = ''; });
+    }
+
+    // ---------------------------------------------------------------
+    // Utilitário
+    // ---------------------------------------------------------------
+    function escapeHtml(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    // ---------------------------------------------------------------
+    // Inicialização: tenta retomar sessão salva
+    // ---------------------------------------------------------------
+    (function iniciar() {
+      var salva = carregarSessaoSalva();
+      if (!salva || !salva.token) return;
+      chamarRpc('validar_sessao_publica', { p_token: salva.token })
+        .then(function (resp) {
+          if (resp.ok) {
+            sessao = { token: salva.token, nome: resp.nome, isAdmin: resp.isAdmin };
+            entrarNoApp();
+          } else {
+            limparSessao();
+          }
+        })
+        .catch(function () { /* mantém tela de login */ });
+    })();
+  </script>
+
+</body>
+</html>
