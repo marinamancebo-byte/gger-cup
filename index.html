@@ -359,7 +359,8 @@
       text-transform: uppercase; letter-spacing: .03em;
       padding: 2px 7px; border-radius: 999px; margin-bottom: 4px;
     }
-    .feed-tipo.neg { background: #E6E9F2; color: var(--ink-soft); }
+    .feed-tipo.prospeccao_fria { background: #E6E9F2; color: var(--ink-soft); }
+    .feed-tipo.indicacao { background: #E3EEFB; color: #2563A8; }
     .feed-tipo.proposta { background: var(--amber-soft); color: var(--amber); }
     .feed-tipo.fechamento { background: var(--green-soft); color: var(--green); }
     .feed-lead { font-weight: 600; }
@@ -539,15 +540,20 @@
           <div id="registrar-aviso" class="aviso erro"></div>
 
           <div class="tipos-grade">
-            <div class="tipo-opcao selecionada" data-tipo="neg">
-              <span class="emoji">📇</span>
-              <div class="rotulo">Neg</div>
+            <div class="tipo-opcao selecionada" data-tipo="prospeccao_fria">
+              <span class="emoji">❄️</span>
+              <div class="rotulo">Prospecção Fria</div>
               <div class="pts">1 ponto</div>
+            </div>
+            <div class="tipo-opcao" data-tipo="indicacao">
+              <span class="emoji">🤝</span>
+              <div class="rotulo">Indicação</div>
+              <div class="pts">2 pontos</div>
             </div>
             <div class="tipo-opcao" data-tipo="proposta">
               <span class="emoji">📄</span>
               <div class="rotulo">Proposta</div>
-              <div class="pts">2 pontos</div>
+              <div class="pts">3 pontos</div>
             </div>
             <div class="tipo-opcao" data-tipo="fechamento">
               <span class="emoji">✅</span>
@@ -598,6 +604,13 @@
           <div id="pendentes-conteudo" class="carregando">Carregando…</div>
         </div>
         <div class="cartao">
+          <div class="titulo-secao">
+            <h2>Registros aprovados e rejeitados</h2>
+            <span class="legenda">só organizadores veem e podem excluir</span>
+          </div>
+          <div id="moderados-conteudo" class="carregando">Carregando…</div>
+        </div>
+        <div class="cartao">
           <div class="titulo-secao"><h2>Organizadores</h2></div>
           <div id="admins-conteudo" class="carregando">Carregando…</div>
         </div>
@@ -627,8 +640,8 @@
     // Estado local
     // ---------------------------------------------------------------
     var sessao = null; // { token, nome, isAdmin }
-    var tipoSelecionado = 'neg';
-    var PONTOS_FIXOS = { neg: 1, proposta: 2 };
+    var tipoSelecionado = 'prospeccao_fria';
+    var PONTOS_FIXOS = { prospeccao_fria: 1, indicacao: 2, proposta: 3 };
 
     function carregarSessaoSalva() {
       try {
@@ -730,7 +743,7 @@
       });
       if (aba === 'placar') carregarPlacar();
       if (aba === 'meus') carregarMeusRegistros();
-      if (aba === 'admin' && sessao.isAdmin) { carregarPendentes(); carregarAdmins(); }
+      if (aba === 'admin' && sessao.isAdmin) { carregarPendentes(); carregarModerados(); carregarAdmins(); }
     }
 
     // ---------------------------------------------------------------
@@ -745,7 +758,7 @@
       if (isNaN(d)) return '';
       return d.toLocaleDateString('pt-BR');
     }
-    var ROTULO_TIPO = { neg: 'Neg', proposta: 'Proposta', fechamento: 'Fechamento' };
+    var ROTULO_TIPO = { prospeccao_fria: 'Prospecção Fria', indicacao: 'Indicação', proposta: 'Proposta', fechamento: 'Fechamento' };
 
     function carregarPlacar() {
       chamarRpc('get_placar')
@@ -815,12 +828,13 @@
       var medalha = ['ouro', 'prata', 'bronze'];
       var linhas = ranking.map(function (r, i) {
         var classePos = medalha[i] || '';
+        var negsTotal = (r.prospeccoes_frias || 0) + (r.indicacoes || 0);
         return '' +
           '<tr>' +
             '<td><span class="pos ' + classePos + '">' + (i + 1) + '</span></td>' +
             '<td><div class="nome-linha">' + escapeHtml(r.nome) + '</div>' +
-              '<div class="mini-stats">' + r.negs + ' neg · ' + r.propostas + ' proposta(s) · ' + r.fechamentos + ' fechamento(s)</div></td>' +
-            '<td class="num">' + r.negs + '</td>' +
+              '<div class="mini-stats">' + r.prospeccoes_frias + ' prospecção fria · ' + r.indicacoes + ' indicação(ões) · ' + r.propostas + ' proposta(s) · ' + r.fechamentos + ' fechamento(s)</div></td>' +
+            '<td class="num">' + negsTotal + '</td>' +
             '<td class="num">' + r.propostas + '</td>' +
             '<td class="num"><span class="pontos-total">' + r.pontos + '</span></td>' +
           '</tr>';
@@ -867,8 +881,9 @@
     document.getElementById('reg-valor').addEventListener('input', atualizarPrevisao);
 
     function calcularPontosCliente(tipo, valor) {
-      if (tipo === 'neg') return 1;
-      if (tipo === 'proposta') return 2;
+      if (tipo === 'prospeccao_fria') return 1;
+      if (tipo === 'indicacao') return 2;
+      if (tipo === 'proposta') return 3;
       if (tipo === 'fechamento') {
         var v = Number(valor) || 0;
         if (v <= 0) return 0;
@@ -920,8 +935,8 @@
           document.getElementById('reg-data').value = new Date().toISOString().slice(0, 10);
           document.getElementById('reg-valor-wrap').hidden = true;
           document.querySelectorAll('.tipo-opcao').forEach(function (o) { o.classList.remove('selecionada'); });
-          document.querySelector('.tipo-opcao[data-tipo="neg"]').classList.add('selecionada');
-          tipoSelecionado = 'neg';
+          document.querySelector('.tipo-opcao[data-tipo="prospeccao_fria"]').classList.add('selecionada');
+          tipoSelecionado = 'prospeccao_fria';
           atualizarPrevisao();
           mostrarToast('Registrado! Vale ' + resp.pontos + ' ponto(s) assim que for aprovado.');
         })
@@ -1015,6 +1030,54 @@
                   carregarPendentes();
                 })
                 .catch(function () { mostrarToast('Não consegui salvar agora.', true); item.style.opacity = '1'; });
+            });
+          });
+        })
+        .catch(function () { alvo.innerHTML = '<div class="vazio">Não consegui carregar agora.</div>'; });
+    }
+
+    function carregarModerados() {
+      var alvo = document.getElementById('moderados-conteudo');
+      alvo.innerHTML = '<div class="carregando">Carregando…</div>';
+      chamarRpc('get_registros_moderados', { p_token: sessao.token })
+        .then(function (resp) {
+          if (!resp.ok) { alvo.innerHTML = '<div class="vazio">' + resp.erro + '</div>'; return; }
+          if (!resp.registros.length) {
+            alvo.innerHTML = '<div class="vazio">Nenhum registro aprovado ou rejeitado ainda.</div>';
+            return;
+          }
+          alvo.innerHTML = resp.registros.map(function (r) {
+            var valorTxt = r.tipo === 'fechamento' ? (' · ' + formatarBRL(r.valor)) : '';
+            return '' +
+              '<div class="registro-item" data-id="' + r.id + '">' +
+                '<div class="registro-topo">' +
+                  '<div>' +
+                    '<span class="feed-tipo ' + r.tipo + '">' + ROTULO_TIPO[r.tipo] + '</span>' +
+                    '<div class="registro-lead">' + escapeHtml(r.lead) + '</div>' +
+                  '</div>' +
+                  '<span class="selo ' + r.status + '">' + r.status + '</span>' +
+                '</div>' +
+                '<div class="registro-meta">' + escapeHtml(r.autor) + ' · ' + formatarDataCurta(r.data) + valorTxt + ' · vale ' + r.pontos + ' pt(s)</div>' +
+                '<div class="registro-acoes">' +
+                  '<button class="botao vermelho pequeno" data-acao-excluir="1">Excluir</button>' +
+                '</div>' +
+              '</div>';
+          }).join('');
+
+          alvo.querySelectorAll('button[data-acao-excluir]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              var item = btn.closest('.registro-item');
+              var id = item.getAttribute('data-id');
+              if (!window.confirm('Excluir este registro? Essa ação não pode ser desfeita e os pontos serão removidos do placar.')) return;
+              btn.disabled = true;
+              btn.textContent = 'Excluindo…';
+              chamarRpc('excluir_registro', { p_token: sessao.token, p_id: id })
+                .then(function (r2) {
+                  if (!r2.ok) { mostrarToast(r2.erro, true); btn.disabled = false; btn.textContent = 'Excluir'; return; }
+                  mostrarToast('Registro excluído.');
+                  carregarModerados();
+                })
+                .catch(function () { mostrarToast('Não consegui excluir agora.', true); btn.disabled = false; btn.textContent = 'Excluir'; });
             });
           });
         })
